@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "DBNAME",
+        "gridfs",
         "jsonify",
         "mongodb",
         "todos"

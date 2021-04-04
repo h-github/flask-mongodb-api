@@ -1,13 +1,15 @@
 from flask_pymongo import PyMongo
 from pymongo.errors import BulkWriteError
 import flask
+import gridfs
 
 app = flask.Flask(__name__)
 
+app.config['MONGO_DBNAME'] = 'todo_db'
 app.config["MONGO_URI"] = "mongodb://localhost:27017/todo_db"
 mongodb_client = PyMongo(app)
 db = mongodb_client.db
-
+fs = gridfs.GridFS(db)
 
 @app.route("/add_one")
 def add_one():
@@ -107,3 +109,13 @@ def save_file():
 @app.route("/get_file/<filename>")
 def get_file(filename):
     return mongodb_client.send_file(filename)
+
+@app.route("/get_files")
+def get_files():
+    files = fs.list()
+    return flask.jsonify([file for file in files])
+
+
+
+if __name__ == "__main__":
+            app.run()
